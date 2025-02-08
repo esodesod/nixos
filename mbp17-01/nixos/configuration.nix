@@ -117,9 +117,11 @@
     nerdfonts
     nodejs_22
     nvd
+    openssl
     pciutils
     ripgrep
     slurp
+    todoist-electron
     unzip
     vim
     vim

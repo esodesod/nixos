@@ -1,20 +1,21 @@
 # Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
+# your system. Help is available in the configuration.nix(5) man page, on
+# https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
   imports =
     [ # Include the results of the hardware scan.
-      /etc/nixos/hardware-configuration.nix
+      ./hardware-configuration.nix
     ];
 
-  # Bootloader.
+  # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "mbp17-01"; # Define your hostname.
+  networking.hostId = "da60cc6c";
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Enable networking
@@ -28,11 +29,18 @@
 
   # Enable the X11 windowing system.
   # You can disable this if you're only using the Wayland session.
-  services.xserver.enable = true;
+  # services.xserver.enable = true;
 
   # Enable the KDE Plasma Desktop Environment.
-  services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
+
+  # Display Manager
+  # services.displayManager.sddm.enable = true;
+  services.displayManager.ly.enable = true;
+  services.displayManager.ly.settings = {
+    save = true;
+    animation = "matrix";
+  };
 
   # Configure keymap in X11
   services.xserver.xkb = {
@@ -59,9 +67,6 @@
     #media-session.enable = true;
   };
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.esod = {
     openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILEvF7PEBh7El5JdDfpG23V+phQctUK2k3jgZZWx7pX0 esod_ed25519" ];
@@ -87,12 +92,6 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # Try to fix wifi for MBP2017
-  boot.kernelParams = [ "brcmfmac.feature_disable=0x82000" ];
-  # boot.kernelModules = [ "wl" ];
-  # boot.extraModulePackages = [ config.boot.kernelPackages.broadcom_sta ];
-  # boot.blacklistedKernelModules = [ "b43" "bcma" "brcmfmac" ];
-
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
@@ -105,22 +104,27 @@
     fish
     fzf
     gcc
+    ghostty
     git
     gnumake
     google-chrome
     grim
     htop
     kitty
+    lmstudio
     logseq
+    ly
     mako
     neovim
     nerdfonts
     nodejs_22
     nvd
+    ollama
     openssl
     pciutils
     ripgrep
     slurp
+    tiny-dfr
     todoist-electron
     unzip
     vim
@@ -130,11 +134,10 @@
     wl-clipboard
   ];
 
-
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
-  system.stateVersion = "24.11"; # Did you read the comment?
+  system.stateVersion = "24.11";
 
   # Neovim
   programs.neovim = {
@@ -151,8 +154,7 @@
     '';
   };
 
-
-  # Sway. See https://wiki.nixos.org/wiki/Sway
+  # gnome-keyring suggested for Sway. See https://wiki.nixos.org/wiki/Sway
   services.gnome.gnome-keyring.enable = true;
 
   # enable Sway window manager
@@ -173,8 +175,6 @@
       ExecStart = ''${pkgs.kanshi}/bin/kanshi -c kanshi_config_file'';
     };
   };
-
-
 
   # Docker
   virtualisation.docker.enable = true;
@@ -216,14 +216,12 @@
   # Firewall
   networking.firewall.allowedTCPPorts = [
     19999 # netdata
-    6666 # nvim remote testing
   ];
 
   # Logseq bruker EOL-versjon av Electron
   nixpkgs.config.permittedInsecurePackages = [
     "electron-27.3.11"
   ];
-
 
   # Enables the 1Password CLI
   programs._1password = { enable = true; };
@@ -235,5 +233,31 @@
     # this makes system auth etc. work properly
     polkitPolicyOwners = [ "esod" ];
   };
+
+  # NOTE: Trying to fix WiFi on BCM43602 rev 02
+  # networking.networkmanager.wifi.scanRandMacAddress = false;
+  # networking.networkmanager.wifi.backend = "iwd";
+  # networking.networkmanager.wifi.macAddress = "00:90:4c:0d:f4:3e";
+  # boot.kernelParams = [ "brcmfmac.feature_disable=0x82000" ];
+  # boot.kernelModules = [ "wl" ];
+  # boot.extraModulePackages = [ config.boot.kernelPackages.broadcom_sta ];
+  # boot.blacklistedKernelModules = [ "b43" "bcma" "brcmfmac" ];
+
+  # HACK: for WiFi on BCM43602 rev 2. See https://bugzilla.kernel.org/show_bug.cgi?id=193121
+  hardware.firmware = [
+    (
+      pkgs.runCommandNoCC "brcmfmac43602-pcie" { } ''
+	   mkdir -p $out/lib/firmware/brcm
+	   cp ${./brcmfmac43602-pcie.txt} $out/lib/firmware/brcm/brcmfmac43602-pcie.txt
+	   ''
+    )
+  ];
+
+  # WIP: Apple TouchBar
+  hardware.apple.touchBar.enable = true;
+  powerManagement.enable = true;
+
+  # # ssh_config and ForwardAgent
+  # programs.ssh.extraConfig = "ForwardAgent Yes";
 
 }

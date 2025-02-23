@@ -97,6 +97,7 @@
   environment.systemPackages = with pkgs; [
     _1password-cli
     _1password-gui
+    appimage-run
     btop
     cargo
     curl
@@ -116,8 +117,7 @@
     ly
     mako
     neovim
-    nerdfonts
-    nodejs_22
+    nodejs_23
     nvd
     ollama
     openssl
@@ -259,5 +259,18 @@
 
   # # ssh_config and ForwardAgent
   # programs.ssh.extraConfig = "ForwardAgent Yes";
+
+  # Remap CAPS-lock to ESC (due to TouchBar not working yet)
+  services.udev.extraHwdb = ''
+	  evdev:atkbd:*
+	  KEYBOARD_KEY_3a=esc
+	  '';
+  # Flakes
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  # Fonts
+  fonts.packages = with pkgs; [
+	  (nerdfonts.override { fonts = [ "ComicShannsMono" ]; })
+  ];
 
 }

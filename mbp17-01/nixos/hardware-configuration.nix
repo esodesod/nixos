@@ -11,10 +11,9 @@
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usbhid" "usb_storage" "sd_mod" "applespi" "spi_pxa2xx_platform" "intel_lpss_pci" "applesmc" ];
   boot.initrd.kernelModules = [ ];
+  # boot.initrd.systemd.enable = true;
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [  ];
-  # NOTE: Keep for further debugging on brcmfmac, if needed
-  # boot.initrd.systemd.enable = true;
   # boot.kernelParams = [ "brcmfmac.feature_disable=0x82000" "brcmfmac.roamoff=1" ];
 
   fileSystems."/" =
@@ -49,7 +48,7 @@
 
   swapDevices =
     [ { device = "/dev/disk/by-id/nvme-APPLE_SSD_SM1024L_C02749400PGHRFN15_1-part2";
-      randomEncryption= true;
+    randomEncryption= true;
     }
     ];
 
@@ -57,15 +56,15 @@
   # (the default) this is the recommended approach. When using systemd-networkd it's
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
-  boot.initrd.network = {
-    enable = true;
-    ssh = {
-      enable = true;
-      port = 2222;
-      hostKeys = [ /etc/ssh/ssh_host_rsa_key ];
-      authorizedKeys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILEvF7PEBh7El5JdDfpG23V+phQctUK2k3jgZZWx7pX0 esod_ed25519" ];
+    boot.initrd.network = {
+	    enable = true;
+	    ssh = {
+		    enable = true;
+		    port = 2222;
+		    hostKeys = [ /etc/ssh/ssh_host_rsa_key ];
+		    authorizedKeys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILEvF7PEBh7El5JdDfpG23V+phQctUK2k3jgZZWx7pX0 esod_ed25519" ];
+	    };
     };
-  };
   networking.useDHCP = lib.mkDefault true;
   # networking.interfaces.enp0s20f0u5.useDHCP = lib.mkDefault true;
   # networking.interfaces.wlp3s0.useDHCP = lib.mkDefault true;

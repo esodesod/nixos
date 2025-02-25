@@ -29,6 +29,16 @@
     shell = pkgs.fish;
   };
 
+  security.sudo.extraRules= [
+    {  users = [ "esod" ];
+      commands = [
+        { command = "ALL" ;
+          options= [ "NOPASSWD" ]; # "SETENV" # Adding the following could be a good idea
+        }
+      ];
+    }
+  ];
+
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
 
@@ -54,6 +64,7 @@
     nvd
     openssl
     ripgrep
+    tcpdump
     unzip
     vim
     wget

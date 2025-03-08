@@ -91,6 +91,9 @@
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.packageOverrides = pkgs: {
+    unstable = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz") {};
+    };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -102,8 +105,9 @@
     cargo
     curl
     dig
+    discord
     fish
-    fzf
+    unstable.fzf
     gcc
     ghostty
     git
@@ -272,5 +276,12 @@
   fonts.packages = with pkgs; [
 	  (nerdfonts.override { fonts = [ "ComicShannsMono" ]; })
   ];
+
+  # override currency to dollar
+  # services.xserver.xkb.extraLayouts.no = {
+  #   description = "override currency to dollar";
+  #   languages   = [ "no" ];
+  #   symbolsFile = /home/esod/.xkb_symbols/custom;
+  # };
 
 }

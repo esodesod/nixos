@@ -68,6 +68,9 @@
     unzip
     vim
     wget
+    k9s
+    minikube
+    kubectl
   ];
 
   # Neovim
@@ -75,6 +78,12 @@
     enable = true;
     defaultEditor = true;
   };
+
+  # Environment variables
+  environment.variables = {
+    MANPAGER = "nvim +Man!";
+  };
+
 
   # Shells
   programs.zsh.enable = true;

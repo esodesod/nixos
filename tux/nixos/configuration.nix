@@ -148,6 +148,9 @@
     wget
     wl-clipboard
     wofi
+    unstable.cudaPackages.cuda_nvcc
+    unstable.cudaPackages.cudnn
+    unstable.cudaPackages.cudatoolkit
   ];
 
   # Enable the OpenSSH daemon.

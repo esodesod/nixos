@@ -125,11 +125,10 @@
     ly
     mako
     neofetch
-    neovim
+    nextcloud-client
     nodejs_23
     nvd
     nvtopPackages.nvidia
-    nextcloud-client
     # ollama
     openssl
     pciutils
@@ -137,9 +136,14 @@
     python312Packages.pip
     ripgrep
     slurp
+    spotify
     tiny-dfr
     todoist-electron
+    unstable.cudaPackages.cuda_nvcc
+    unstable.cudaPackages.cudatoolkit
+    unstable.cudaPackages.cudnn
     unstable.fzf
+    unstable.neovim
     unstable.obsidian
     unzip
     vim
@@ -148,9 +152,9 @@
     wget
     wl-clipboard
     wofi
-    unstable.cudaPackages.cuda_nvcc
-    unstable.cudaPackages.cudnn
-    unstable.cudaPackages.cudatoolkit
+    # testing mediaplayer.py for waybar
+    playerctl
+    python312Packages.pygobject3
   ];
 
   # Enable the OpenSSH daemon.
@@ -220,7 +224,16 @@
     ];
   };
 
+
 # Netdata
+# Enable netdata modern web ui (unfree). See https://wiki.nixos.org/wiki/Netdata
+  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+	  "netdata"
+  ];
+  services.netdata.package = pkgs.netdata.override {
+	  withCloudUi = true;
+  };
+
   services.netdata = {
 	  enable = true;
 	  config = {

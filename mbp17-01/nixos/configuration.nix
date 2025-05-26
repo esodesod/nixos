@@ -52,7 +52,7 @@
   console.keyMap = "no";
 
   # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
@@ -121,7 +121,7 @@
     ly
     mako
     neovim
-    nodejs_23
+    nodejs_24
     nvd
     ollama
     openssl
@@ -274,7 +274,8 @@
 
   # Fonts
   fonts.packages = with pkgs; [
-	  (nerdfonts.override { fonts = [ "ComicShannsMono" ]; })
+	  # (nerdfonts.override { fonts = [ "ComicShannsMono" ]; })
+	  nerd-fonts.comic-shanns-mono
   ];
 
   # override currency to dollar

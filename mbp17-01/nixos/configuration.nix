@@ -13,6 +13,9 @@
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  # Test 6.15 kernel
+  # Not supported as zfs-kernel-2.3.2-6.15-rc7 is broken. Wait a bit more
+  # boot.kernelPackages = pkgs.linuxPackages_testing;
 
   networking.hostName = "mbp17-01"; # Define your hostname.
   networking.hostId = "da60cc6c";
@@ -107,7 +110,6 @@
     dig
     discord
     fish
-    unstable.fzf
     gcc
     ghostty
     git
@@ -116,6 +118,8 @@
     grim
     htop
     kitty
+    lazygit
+    linuxKernel.kernels.linux_testing
     lmstudio
     logseq
     ly
@@ -128,14 +132,17 @@
     pciutils
     ripgrep
     slurp
+    spotify
     tiny-dfr
     todoist-electron
+    unstable.fzf
     unzip
     vim
     vim
     wezterm
     wget
     wl-clipboard
+    wofi
   ];
 
   # Enable the OpenSSH daemon.
@@ -284,5 +291,8 @@
   #   languages   = [ "no" ];
   #   symbolsFile = /home/esod/.xkb_symbols/custom;
   # };
+
+  programs.hyprland.enable = true;
+  programs.hyprlock.enable = true;
 
 }

@@ -8,6 +8,7 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      # ./snd-hda.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -95,8 +96,10 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
   nixpkgs.config.packageOverrides = pkgs: {
-    unstable = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz") {};
+    unstable = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz") {
+      config.allowUnfree = true;
     };
+  };
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
@@ -109,14 +112,17 @@
     curl
     dig
     discord
+    dmidecode
     fish
     gcc
     ghostty
     git
+    glxinfo
     gnumake
     google-chrome
     grim
     htop
+    killall
     kitty
     lazygit
     linuxKernel.kernels.linux_testing
@@ -125,6 +131,7 @@
     ly
     mako
     neovim
+    nextcloud-client
     nodejs_24
     nvd
     ollama
@@ -136,9 +143,11 @@
     tiny-dfr
     todoist-electron
     unstable.fzf
+    unstable.obsidian
     unzip
     vim
-    vim
+    vivaldi
+    waybar
     wezterm
     wget
     wl-clipboard
@@ -294,5 +303,15 @@
 
   programs.hyprland.enable = true;
   programs.hyprlock.enable = true;
+
+  # boot = {
+  #  extraModulePackages = [
+  #   (pkgs.callPackage ./snd-hda.nix {
+  #    kernel = config.boot.kernelPackages.kernel;
+  #    })
+  #  ];
+  # };
+
+
 
 }

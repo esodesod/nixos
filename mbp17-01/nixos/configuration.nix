@@ -8,7 +8,6 @@
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
-      # ./snd-hda.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -303,15 +302,6 @@
 
   programs.hyprland.enable = true;
   programs.hyprlock.enable = true;
-
-  # boot = {
-  #  extraModulePackages = [
-  #   (pkgs.callPackage ./snd-hda.nix {
-  #    kernel = config.boot.kernelPackages.kernel;
-  #    })
-  #  ];
-  # };
-
 
 
 }

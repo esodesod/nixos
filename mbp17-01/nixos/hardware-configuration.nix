@@ -18,7 +18,7 @@
   # boot.kernelParams = [ "brcmfmac.feature_disable=0x82000" "brcmfmac.roamoff=1" ];
 
   boot.extraModulePackages = [
-    (import /home/esod/drivers/touchbar.nix {
+    (import ./touchbar/touchbar.nix {
       stdenv = pkgs.stdenv; 
       lib = pkgs.lib;
       kernel = config.boot.kernelPackages.kernel; 
@@ -26,6 +26,15 @@
       buildPackages = pkgs.buildPackages; 
     })
   ];
+
+  # WIP: temp
+  # boot = {
+  #  extraModulePackages = [
+  #   (pkgs.callPackage ./snd-hda.nix {
+  #    kernel = config.boot.kernelPackages.kernel;
+  #    })
+  #  ];
+  # };
 
   fileSystems."/" =
     { device = "zpool/root";

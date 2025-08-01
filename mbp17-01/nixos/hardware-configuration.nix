@@ -9,12 +9,23 @@
       (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usbhid" "usb_storage" "sd_mod" "applespi" "spi_pxa2xx_platform" "intel_lpss_pci" "applesmc" ];
+
+  boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usbhid" "usb_storage" "sd_mod" "applespi" "spi_pxa2xx_platform" "intel_lpss_pci" "applesmc" "apple-ib-tb" "apple-ibridge" "apple-ib-als" ];
   boot.initrd.kernelModules = [ ];
   # boot.initrd.systemd.enable = true;
   boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModulePackages = [  ];
+  # boot.extraModulePackages = [  ];
   # boot.kernelParams = [ "brcmfmac.feature_disable=0x82000" "brcmfmac.roamoff=1" ];
+
+  boot.extraModulePackages = [
+    (import /home/esod/drivers/touchbar.nix {
+      stdenv = pkgs.stdenv; 
+      lib = pkgs.lib;
+      kernel = config.boot.kernelPackages.kernel; 
+      fetchFromGitHub = pkgs.fetchFromGitHub; 
+      buildPackages = pkgs.buildPackages; 
+    })
+  ];
 
   fileSystems."/" =
     { device = "zpool/root";

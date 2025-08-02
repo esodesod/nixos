@@ -105,6 +105,7 @@
     _1password-gui
     appimage-run
     btop
+    brightnessctl
     cargo
     curl
     dig

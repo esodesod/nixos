@@ -34,6 +34,14 @@
       fetchFromGitHub = pkgs.fetchFromGitHub;
       buildPackages = pkgs.buildPackages;
     })
+    (import ./snd-hda-cirrus.nix {
+      stdenv = pkgs.stdenv;
+      lib = pkgs.lib;
+      kernel = config.boot.kernelPackages.kernel;
+      fetchgit = pkgs.fetchgit;
+      # fetchFromGitHub = pkgs.fetchFromGitHub;
+      # buildPackages = pkgs.buildPackages;
+    })
   ];
 
   fileSystems."/" = {

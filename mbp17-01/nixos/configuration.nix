@@ -125,6 +125,7 @@
     lazygit
     linuxKernel.kernels.linux_testing
     lmstudio
+    lm_sensors
     logseq
     ly
     mako
@@ -145,6 +146,9 @@
     unzip
     vim
     vivaldi
+    xfce.thunar
+    xfce.tumbler
+    xdg-utils
     waybar
     wezterm
     wget
@@ -292,5 +296,9 @@
 
   # Installer version used (initially)
   system.stateVersion = "25.05";
+
+  # keyring
+  services.gnome.gnome-keyring.enable = true;
+  security.pam.services.ly.enableGnomeKeyring = true;
 
 }

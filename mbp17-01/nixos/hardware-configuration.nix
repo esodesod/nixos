@@ -73,15 +73,9 @@
     options = [ "zfsutil" ];
   };
 
+  # ESP (EFI) partition created by macOS Ventura-installer (contains Apple firmware for e.g. Apple MBP 2017 Touchbar, etc.)
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/BD74-8AB7";
-    fsType = "vfat";
-    options = [ "fmask=0022" "dmask=0022" ];
-  };
-
-  # EFI created by macOS (Ventura) Installer (Apple firmware, etc.)
-  fileSystems."/boot/efi" = {
-    device = "/dev/disk/by-uuid/12CE-A600";
+    device = "/dev/nvme0n1p1";
     fsType = "vfat";
     options = [ "fmask=0022" "dmask=0022" ];
   };

@@ -18,8 +18,8 @@
     };
     efi = {
       canTouchEfiVariables = true;
-      # custom EFI partition created by macOS installer (conotains firmware for touchbar, etc.)
-      efiSysMountPoint = "/boot/efi";
+      # custom EFI partition created by macOS installer (contains firmware for Apple MBP 2017 touchbar, etc.)
+      efiSysMountPoint = "/boot";
     };
   };
 

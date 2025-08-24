@@ -44,6 +44,11 @@
     })
   ];
 
+  # Set applespi parameter ISO_LAYOUT=1 (Y|True) for my built-in Apple Keyboard (makes "|", "<" and ">" work as expected)
+  boot.extraModprobeConfig = ''
+    options applespi iso_layout=1
+  '';
+
   fileSystems."/" = {
     device = "zpool/root";
     fsType = "zfs";
@@ -69,13 +74,13 @@
   };
 
   fileSystems."/boot" = {
-    device = "/dev/disk/by-uuid/2F02-586D";
+    device = "/dev/disk/by-uuid/BD74-8AB7";
     fsType = "vfat";
     options = [ "fmask=0022" "dmask=0022" ];
   };
 
   # EFI created by macOS (Ventura) Installer (Apple firmware, etc.)
-  fileSystems."/boot/efi" = {
+  fileSystems."/boot/EFI" = {
     device = "/dev/disk/by-uuid/5F66-17ED";
     fsType = "vfat";
     options = [ "fmask=0022" "dmask=0022" ];

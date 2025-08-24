@@ -11,11 +11,15 @@
 
   # Use the systemd-boot EFI boot loader.
   boot.loader = {
-    systemd-boot = { enable = true; };
+    systemd-boot = {
+      enable = true;
+      # Using XBOOTLDR resulted in "black screen" on my MBP17. Keep for reference (future testing)
+      # xbootldrMountPoint = "/boot";
+    };
     efi = {
       canTouchEfiVariables = true;
       # custom EFI partition created by macOS installer (conotains firmware for touchbar, etc.)
-      efiSysMountPoint = "/boot/efi";
+      efiSysMountPoint = "/boot/EFI";
     };
   };
 
@@ -104,13 +108,15 @@
     _1password-cli
     _1password-gui
     appimage-run
-    btop
     brightnessctl
+    btop
     cargo
     curl
     dig
     discord
     dmidecode
+    efibootmgr
+    efivar
     fish
     gcc
     ghostty
@@ -124,9 +130,10 @@
     kitty
     lazygit
     linuxKernel.kernels.linux_testing
-    lmstudio
     lm_sensors
+    lmstudio
     logseq
+    lsof
     ly
     mako
     neovim
@@ -146,14 +153,14 @@
     unzip
     vim
     vivaldi
-    xfce.thunar
-    xfce.tumbler
-    xdg-utils
     waybar
     wezterm
     wget
     wl-clipboard
     wofi
+    xdg-utils
+    xfce.thunar
+    xfce.tumbler
   ];
 
   # Enable the OpenSSH daemon.

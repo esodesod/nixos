@@ -142,6 +142,7 @@
     nvd
     ollama
     openssl
+    parted
     pciutils
     ripgrep
     slurp

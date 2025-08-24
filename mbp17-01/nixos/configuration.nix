@@ -19,7 +19,7 @@
     efi = {
       canTouchEfiVariables = true;
       # custom EFI partition created by macOS installer (conotains firmware for touchbar, etc.)
-      efiSysMountPoint = "/boot/EFI";
+      efiSysMountPoint = "/boot/efi";
     };
   };
 

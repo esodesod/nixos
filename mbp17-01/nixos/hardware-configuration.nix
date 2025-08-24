@@ -80,14 +80,14 @@
   };
 
   # EFI created by macOS (Ventura) Installer (Apple firmware, etc.)
-  fileSystems."/boot/EFI" = {
-    device = "/dev/disk/by-uuid/5F66-17ED";
+  fileSystems."/boot/efi" = {
+    device = "/dev/disk/by-uuid/12CE-A600";
     fsType = "vfat";
     options = [ "fmask=0022" "dmask=0022" ];
   };
 
   swapDevices = [{
-    device = "/dev/disk/by-id/nvme-APPLE_SSD_SM1024L_C02749400PGHRFN15_1-part2";
+    device = "/dev/nvme0n1p4";
     randomEncryption = true;
   }];
 

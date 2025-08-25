@@ -15,6 +15,7 @@
       enable = true;
       # Using XBOOTLDR resulted in "black screen" on my MBP17. Keep for reference (future testing)
       # xbootldrMountPoint = "/boot";
+      netbootxyz.enable = true;
     };
     efi = {
       canTouchEfiVariables = true;
@@ -236,6 +237,7 @@
   # Netdata
   services.netdata = {
     enable = true;
+    package = pkgs.netdata.override { withCloudUi = true; };
     config = {
       global = {
         "memory mode" = "ram";

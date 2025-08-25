@@ -106,8 +106,6 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    _1password-cli
-    _1password-gui
     appimage-run
     brightnessctl
     btop
@@ -137,7 +135,6 @@
     lsof
     ly
     mako
-    neovim
     nextcloud-client
     nodejs_24
     nvd

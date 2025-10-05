@@ -107,6 +107,9 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     appimage-run
+    bluetui
+    bluez
+    bluez-tools
     brightnessctl
     btop
     cargo
@@ -123,8 +126,10 @@
     glxinfo
     gnumake
     google-chrome
+    grc
     grim
     htop
+    hyprpaper
     killall
     kitty
     lazygit
@@ -155,11 +160,13 @@
     waybar
     wezterm
     wget
+    wirelesstools # iwconfig, iw
     wl-clipboard
     wofi
     xdg-utils
     xfce.thunar
     xfce.tumbler
+    zotero-beta
   ];
 
   # Enable the OpenSSH daemon.
@@ -307,5 +314,32 @@
   # keyring
   services.gnome.gnome-keyring.enable = true;
   security.pam.services.ly.enableGnomeKeyring = true;
+
+  # bluetooth (airpods, etc.)
+  hardware.bluetooth.enable = true;
+
+  # pki
+  security.pki.certificates = [ ''
+    -----BEGIN CERTIFICATE-----
+    MIIDHzCCAgegAwIBAgIQIQ0OxDVplJtKhNjbm78GaTANBgkqhkiG9w0BAQsFADAi
+    MSAwHgYDVQQDExdlc29kLm5vIFByaW1hcnkgUm9vdCBDQTAeFw0xNTExMjAxMjUx
+    NTdaFw0zMDExMjAxMzAxNTdaMCIxIDAeBgNVBAMTF2Vzb2Qubm8gUHJpbWFyeSBS
+    b290IENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAotuiSbSnSxEb
+    PrhUDQ76FQhn8I7TSPHZgQxRc9u0a9S8Gzdu26U0c5W5yBICmNWtIoHhidbxZnud
+    0sBCGSb947Oru79n1EuW1/LdDUDDPVflWGxP7Iz+kuTQ28klaybnlI+Bv7XOWmLR
+    sDDt2Vb4QgfkfU6TsDtTPEdHQFqpPUhyZUB3nq+wt5v6mRWwHdY64WKA8Uiyxgr9
+    bC0J1oqsDGQraHzymu98N7IUrBvX6oEFc84gZiG6ijNfe947mO7liLrWhXHHNQc/
+    72uLaiCljdVm+nPvtX5w7tqCs8JLZzjsU++vv2CMcKMQoZo5aZSYtMk11oH4bqdC
+    08FBAd0SUQIDAQABo1EwTzALBgNVHQ8EBAMCAYYwDwYDVR0TAQH/BAUwAwEB/zAd
+    BgNVHQ4EFgQUzaSv2KPTloe7ty0QCDgZ0e1yfE4wEAYJKwYBBAGCNxUBBAMCAQAw
+    DQYJKoZIhvcNAQELBQADggEBAIQsjhWLXezy14/pzXdXnPPtdPQ6Tfx2D4qVfAEv
+    0iWNr4G5KWg5JPBBaPnEmxZnkDnZzbomlhvrvO54fVYcIpZ3o7OPkC8u6d0u927H
+    B+8Z4AyAmjvL51i1Fd24nZBUtKI9oEDPtUNic7ISnY06lFmGJNqcrpwq10OQlBS8
+    J9C6g6U3ht3FrTfXP+voLzUVRbtNhhUffc9X/QlDxhKIMgtLtV/icmmcGh0il1hk
+    9KxSNmoTrh8AZRw/dx2t1AW0kyC8bAn9C5KSBilCZiCdu68kXEph9a97EoeIEPYU
+    FCvNV4NbtoSslIIUlnzTQKNG4cvETSTRdWv1lrJhswR91GI=
+    -----END CERTIFICATE-----
+  ''
+  ];
 
 }

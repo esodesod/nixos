@@ -120,6 +120,7 @@
     efibootmgr
     efivar
     fish
+    flameshot
     gcc
     ghostty
     git
@@ -166,7 +167,7 @@
     xdg-utils
     xfce.thunar
     xfce.tumbler
-    zotero-beta
+    zotero
   ];
 
   # Enable the OpenSSH daemon.
@@ -201,6 +202,17 @@
 
     # this makes system auth etc. work properly
     polkitPolicyOwners = [ "esod" ];
+  };
+
+  # 1Password to unlock extensions on custom chrome-based browsers
+  # https://wiki.nixos.org/wiki/1Password
+  environment.etc = {
+    "1password/custom_allowed_browsers" = {
+      text = ''
+        vivaldi-bin
+      '';
+      mode = "0755";
+    };
   };
 
   # kanshi systemd service
@@ -319,7 +331,7 @@
   hardware.bluetooth.enable = true;
 
   # pki
-  security.pki.certificates = [ ''
+  security.pki.certificates = [''
     -----BEGIN CERTIFICATE-----
     MIIDHzCCAgegAwIBAgIQIQ0OxDVplJtKhNjbm78GaTANBgkqhkiG9w0BAQsFADAi
     MSAwHgYDVQQDExdlc29kLm5vIFByaW1hcnkgUm9vdCBDQTAeFw0xNTExMjAxMjUx
@@ -339,7 +351,36 @@
     9KxSNmoTrh8AZRw/dx2t1AW0kyC8bAn9C5KSBilCZiCdu68kXEph9a97EoeIEPYU
     FCvNV4NbtoSslIIUlnzTQKNG4cvETSTRdWv1lrJhswR91GI=
     -----END CERTIFICATE-----
-  ''
-  ];
+    -----BEGIN CERTIFICATE-----
+    MIIEdDCCA1ygAwIBAgITMgAAAAo4gUsobh8qfAAAAAAACjANBgkqhkiG9w0BAQsF
+    ADAiMSAwHgYDVQQDExdlc29kLm5vIFByaW1hcnkgUm9vdCBDQTAeFw0xNTExMjQy
+    MTQ2MTNaFw0yNTExMjQyMTU2MTNaMEwxFTATBgoJkiaJk/IsZAEZFgVsb2NhbDEU
+    MBIGCgmSJomT8ixkARkWBGVzb2QxHTAbBgNVBAMTFGVzb2Qubm8gSXNzdWluZyBD
+    QTAxMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2LP0eS8xGPAd35SH
+    IRpWhQKv7aBvNNr9N5w8Rw5HIPOFCIwJLMvQ+u5IETR1A6kWYfY+eofGloUepcom
+    Um8ujlN0+bOXuyBWTrHIBrgItyx5FHSjQqWtxUpn78q7E/YCAUyTIs98jeI3YJFN
+    0yD6H1EPr2Fc0FhSZRX6d+Zv/R+us6pVwuNnHpmrjrHX6ot1oKhqjggtI3rl7pz7
+    txHsyWwRIDfeOzB/mXCQk4TKIdR108/L6d2eq+k5QlY11IOsifinycmcl5S9YBi8
+    u7Ux8zYznf1xnzEaYY08yWwvQm9MZFJw2oz8VwHBST0ykbhSOVbBbGnLW1ZMShVy
+    LgX4zwIDAQABo4IBdzCCAXMwEgYJKwYBBAGCNxUBBAUCAwQABDAjBgkrBgEEAYI3
+    FQIEFgQUa3630eU85mB674Y3rtfGgfBt550wHQYDVR0OBBYEFJdKMKZZHYOSwC2y
+    L36tvbfU/1uZMBEGA1UdIAQKMAgwBgYEVR0gADAZBgkrBgEEAYI3FAIEDB4KAFMA
+    dQBiAEMAQTALBgNVHQ8EBAMCAYYwDwYDVR0TAQH/BAUwAwEB/zAfBgNVHSMEGDAW
+    gBTNpK/Yo9OWh7u3LRAIOBnR7XJ8TjA/BgNVHR8EODA2MDSgMqAwhi5odHRwOi8v
+    cGtpLmVzb2Qubm8vZXNvZC1uby1wcmltYXJ5LXJvb3QtY2EuY3JsMGsGCCsGAQUF
+    BwEBBF8wXTAfBggrBgEFBQcwAYYTaHR0cDovL29jc3AuZXNvZC5ubzA6BggrBgEF
+    BQcwAoYuaHR0cDovL3BraS5lc29kLm5vL2Vzb2Qtbm8tcHJpbWFyeS1yb290LWNh
+    LmNydDANBgkqhkiG9w0BAQsFAAOCAQEALcsL+pczrUumeBBZ9w9lG0vOnqXY7vCx
+    aURvPF4Q0UBYMM1VDyxp3Pj5raJ82SjyH+ehQ1cRMRlKj6jW7aqcA1KKqy8mmsoS
+    jKHeR/YyZShu9EAkocTgYsM5hTEd0hRcKvV/v0M/PIVhQ/87arvyGB2o1X3NfhRi
+    qSz0L8eVhgppRTQAJSxGy6wHeFdtc3+iO2PcA+6iJbM4dn49zUORLkkuU/54buSw
+    FsJ/acXF0mBeSAHclJ9zB3AZR5d6W/xL/LIFEkd8B6s6k0yFQ3AAcZV7PWru/LQ2
+    WUe6xzVctVFkTiIRDvCMqLB8aF/7AY5e2i2cSUS/U+JLNsS9rjllxQ==
+    -----END CERTIFICATE-----
+  ''];
+  programs.virt-manager.enable = true;
+  users.groups.libvirtd.members = [ "esod" ];
+  virtualisation.libvirtd.enable = true;
+  virtualisation.spiceUSBRedirection.enable = true;
 
 }

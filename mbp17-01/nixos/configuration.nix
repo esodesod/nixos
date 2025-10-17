@@ -134,7 +134,6 @@
     killall
     kitty
     lazygit
-    linuxKernel.kernels.linux_testing
     lm_sensors
     lmstudio
     logseq

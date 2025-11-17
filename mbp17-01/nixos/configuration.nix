@@ -85,14 +85,14 @@
     shell = pkgs.fish;
   };
 
-  security.sudo.extraRules = [{
-    users = [ "esod" ];
-    commands = [{
-      command = "ALL";
-      options =
-        [ "NOPASSWD" ]; # "SETENV" # Adding the following could be a good idea
-    }];
-  }];
+  # security.sudo.extraRules = [{
+  #   users = [ "esod" ];
+  #   commands = [{
+  #     command = "ALL";
+  #     options =
+  #       [ "NOPASSWD" ]; # "SETENV" # Adding the following could be a good idea
+  #   }];
+  # }];
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -113,10 +113,12 @@
     brightnessctl
     btop
     cargo
+    cryptsetup
     curl
     dig
     discord
     dmidecode
+    dunst
     efibootmgr
     efivar
     fish
@@ -139,8 +141,9 @@
     logseq
     lsof
     ly
-    mako
+    # mako
     nextcloud-client
+    nix-search-tv
     nodejs_24
     nvd
     ollama
@@ -156,6 +159,7 @@
     unstable.obsidian
     unzip
     vim
+    virt-viewer
     vivaldi
     waybar
     wezterm
@@ -166,7 +170,9 @@
     xdg-utils
     xfce.thunar
     xfce.tumbler
+    yubikey-manager # provides ykman
     zotero
+    zoxide
   ];
 
   # Enable the OpenSSH daemon.
@@ -381,5 +387,35 @@
   users.groups.libvirtd.members = [ "esod" ];
   virtualisation.libvirtd.enable = true;
   virtualisation.spiceUSBRedirection.enable = true;
+
+  # yubikey
+  # https://joinemm.dev/blog/yubikey-nixos-guide#sources 
+
+  services = {
+    pcscd.enable = true;
+    udev.packages = [ pkgs.yubikey-personalization ];
+  };
+
+  security.pam = {
+    u2f = {
+      enable = true;
+      settings = {
+        cue = true;
+        cue_prompt = " Touch the Yubikey to continue...";
+        interactive = false;
+        origin = "pam://yubi";
+
+        # generated with pamu2fcfg -n -o pam://yubi
+        authfile = pkgs.writeText "u2f-mappings" (lib.concatStrings [
+          "esod:TF+zGxo13aIMTY+scorTCd/b6+UbtAPEIcMcXTpl3N3OfR/pzkjM+bBahN7zpuK7yPFctbLUtB/JZfSZFdQCwQ==,7ePwfuqkOw4CutSU8rNE1UW/RMw/ceyHufQ0umuk9dodHdht1FhSQAWzioEnYW1FcjC+bIuc8L4bM7PvbFtgTQ==,es256,+presence" # nano
+        ]);
+      };
+    };
+
+    services = {
+      sudo.u2fAuth = true;
+      login.u2fAuth = false;
+    };
+  };
 
 }

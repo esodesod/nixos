@@ -92,29 +92,42 @@ in
     devenv
     dig
     discord
+    dmidecode
     dunst
+    efibootmgr
+    efivar
     fastfetch
     ffmpeg
     fish
+    flameshot
     gcc
     ghostty
     git
     glxinfo
     gnumake
     google-chrome
+    grc
     grim
     htop
+    hyprpaper
+    killall
     kitty
+    lazygit
+    lm_sensors
     lmstudio
+    lsof
     ly
     mako
     neofetch
     nextcloud-client
+    nix-search-tv
     nodejs_24
     nvd
     nvtopPackages.nvidia
     openssl
+    parted
     pciutils
+    playerctl # mediaplayer.py for waybar
     python312
     python312Packages.pip
     ripgrep
@@ -130,16 +143,17 @@ in
     unstable.obsidian
     unzip
     vim
+    virt-viewer
     vivaldi
-    xfce.thunar
-    xfce.tumbler
-    xdg-utils
     waybar
     wezterm
     wget
     wl-clipboard
     wofi
-    playerctl # mediaplayer.py for waybar
+    xdg-utils
+    xfce.thunar
+    xfce.tumbler
+    zoxide
   ];
 
   # Enable the OpenSSH daemon.

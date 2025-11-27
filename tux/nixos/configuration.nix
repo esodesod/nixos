@@ -1,12 +1,20 @@
-# Edit this configuration file to define what should be installed on
-# your system. Help is available in the configuration.nix(5) man page, on
+# NixOS configuration.nix for esod.no > tux
+# Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
 { config, lib, pkgs, ... }:
 
-{
+let
+  unstable = import <unstable> {
+    config.allowUnfree = true;
+    config.cudaSupport = true;
+  };
+in
+
+
+  {
   imports =
-    [ # Include the results of the hardware scan.
+    [
       ./hardware-configuration.nix
     ];
 
@@ -14,9 +22,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  networking.hostName = "tux"; # Define your hostname.
-
-  # Enable networking
+  networking.hostName = "tux";
   networking.networkmanager.enable = true;
 
   # Set your time zone.
@@ -24,10 +30,6 @@
 
   # Select internationalisation properties.
   i18n.defaultLocale = "en_US.UTF-8";
-
-  # Enable the X11 windowing system.
-  # You can disable this if you're only using the Wayland session.
-  # services.xserver.enable = true;
 
   # Enable the KDE Plasma Desktop Environment.
   services.desktopManager.plasma6.enable = true;
@@ -50,19 +52,13 @@
   console.keyMap = "no";
 
   # Enable sound with pipewire.
-  hardware.pulseaudio.enable = false;
+  services.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
     enable = true;
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-    # If you want to use JACK applications, uncomment this
-    #jack.enable = true;
-
-    # use the example session manager (no others are packaged yet so this is enabled by default,
-    # no need to redefine it in your config for now)
-    #media-session.enable = true;
   };
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -75,31 +71,20 @@
   }; 
 
   security.sudo.extraRules= [
-  {  users = [ "esod" ];
-	  commands = [
-	  { command = "ALL" ;
-		  options= [ "NOPASSWD" ]; # "SETENV" # Adding the following could be a good idea
-	  }
-	  ];
-  }
+    {  users = [ "esod" ];
+      commands = [
+	{ command = "ALL" ;
+	  options= [ "NOPASSWD" ]; # no sudo password (until using YubiKey)
+	}
+      ];
+    }
   ];
-
-  # Install firefox.
-  programs.firefox.enable = true;
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.packageOverrides = pkgs: {
-	  unstable = import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/nixos-unstable.tar.gz") {
-		  config.allowUnfree = true;
-	  };
-    };
 
-  # List packages installed in system profile. To search, run:
-  # $ nix search wget
+  # packages
   environment.systemPackages = with pkgs; [
-    _1password-cli
-    _1password-gui
     appimage-run
     btop
     cargo
@@ -121,15 +106,13 @@
     htop
     kitty
     lmstudio
-    # logseq
     ly
     mako
     neofetch
     nextcloud-client
-    nodejs_23
+    nodejs_24
     nvd
     nvtopPackages.nvidia
-    # ollama
     openssl
     pciutils
     python312
@@ -138,23 +121,25 @@
     slurp
     spotify
     tiny-dfr
+    tmux
     todoist-electron
     unstable.cudaPackages.cuda_nvcc
     unstable.cudaPackages.cudatoolkit
     unstable.cudaPackages.cudnn
     unstable.fzf
-    unstable.neovim
     unstable.obsidian
     unzip
     vim
+    vivaldi
+    xfce.thunar
+    xfce.tumbler
+    xdg-utils
     waybar
     wezterm
     wget
     wl-clipboard
     wofi
-    # testing mediaplayer.py for waybar
-    playerctl
-    python312Packages.pygobject3
+    playerctl # mediaplayer.py for waybar
   ];
 
   # Enable the OpenSSH daemon.
@@ -176,9 +161,6 @@
   fish_vi_key_bindings
     '';
   };
-
-  # gnome-keyring suggested for Sway. See https://wiki.nixos.org/wiki/Sway
-  services.gnome.gnome-keyring.enable = true;
 
   # enable Sway window manager
   programs.sway = {
@@ -225,36 +207,32 @@
   };
 
 
-# Netdata
-# Enable netdata modern web ui (unfree). See https://wiki.nixos.org/wiki/Netdata
+  # Netdata: enable netdata modern web ui (unfree). See https://wiki.nixos.org/wiki/Netdata
   nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
-	  "netdata"
+    "netdata"
   ];
   services.netdata.package = pkgs.netdata.override {
-	  withCloudUi = true;
+    withCloudUi = true;
   };
 
   services.netdata = {
-	  enable = true;
-	  config = {
-		  global = {
-			  "memory mode" = "ram";
-			  "debug log" = "none";
-			  "access log" = "none";
-			  "error log" = "syslog";
-		  };
-	  };
+    enable = true;
+    config = {
+      global = {
+	"memory mode" = "ram";
+	"debug log" = "none";
+	"access log" = "none";
+	"error log" = "syslog";
+      };
+    };
   };
 
   # Firewall
   networking.firewall.allowedTCPPorts = [
-    19999 # netdata
+    8000 # My WhisperX backend API
+    1234 # LM Studio "OpenAI" API
+    19999 # Netdata
   ];
-
-  # Logseq bruker EOL-versjon av Electron
-  # nixpkgs.config.permittedInsecurePackages = [
-  #   "electron-27.3.11"
-  # ];
 
   # Enables the 1Password CLI
   programs._1password = { enable = true; };
@@ -280,7 +258,7 @@
 
   # Fonts
   fonts.packages = with pkgs; [
-  (nerdfonts.override { fonts = [ "ComicShannsMono" ]; })
+    nerd-fonts.comic-shanns-mono
   ];
 
   # override currency to dollar
@@ -310,31 +288,37 @@
     # Experimental and only works on modern Nvidia GPUs (Turing or newer).
     powerManagement.finegrained = false;
 
-    # Use the NVidia open source kernel module (not to be confused with the
-    # independent third-party "nouveau" open source driver).
-    # Support is limited to the Turing and later architectures. Full list of 
-    # supported GPUs is at: 
-    # https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus 
-    # Only available from driver 515.43.04+
+    # Use open source kernel module (of nvidia, not nouveau" open source driver)
+    # See https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus 
     open = true;
 
-    # Enable the Nvidia settings menu,
-	# accessible via `nvidia-settings`.
+    # Enable the Nvidia settings menu, accessible via `nvidia-settings`.
     nvidiaSettings = true;
 
-    # Optionally, you may need to select the appropriate driver version for your specific GPU.
-    # package = config.boot.kernelPackages.nvidiaPackages.beta;
-    package = config.boot.kernelPackages.nvidiaPackages.mkDriver {
-	    version = "570.133.07";
-	    sha256_64bit = "sha256-LUPmTFgb5e9VTemIixqpADfvbUX1QoTT2dztwI3E3CY=";
-	    sha256_aarch64 = "sha256-yTovUno/1TkakemRlNpNB91U+V04ACTMwPEhDok7jI0=";
-	    openSha256 = "sha256-9l8N83Spj0MccA8+8R1uqiXBS0Ag4JrLPjrU3TaXHnM=";
-	    settingsSha256 = "sha256-XMk+FvTlGpMquM8aE8kgYK2PIEszUZD2+Zmj2OpYrzU=";
-	    persistencedSha256 = "sha256-G1V7JtHQbfnSRfVjz/LE2fYTlh9okpCbE4dfX9oYSg8=";
-    };
+    # Use production version
+    package = config.boot.kernelPackages.nvidiaPackages.production;
   };
+
+  hardware.nvidia-container-toolkit.enable = true;
 
   programs.hyprland.enable = true;
   programs.hyprlock.enable = true;
+
+  # keyring
+  services.gnome.gnome-keyring.enable = true;
+  security.pam.services.ly.enableGnomeKeyring = true;
+
+  # cache for CUDA packages
+  nix.settings = {
+    substituters = [
+      "https://cache.nixos-cuda.org"
+    ];
+    trusted-public-keys = [
+      "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M="
+    ];
+  };
+
+  # also enable cudaSupport
+  nixpkgs.config.cudaSupport = true;
 
 }

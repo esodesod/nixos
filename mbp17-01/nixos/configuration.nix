@@ -46,7 +46,6 @@
   i18n.defaultLocale = "en_US.UTF-8";
 
   # Display Manager
-  # services.displayManager.sddm.enable = true;
   services.displayManager.ly.enable = true;
   services.displayManager.ly.settings = {
     save = true;
@@ -133,6 +132,7 @@
     grim
     htop
     hyprpaper
+    hyprpolkitagent
     killall
     kitty
     lazygit
@@ -332,6 +332,9 @@
   services.gnome.gnome-keyring.enable = true;
   security.pam.services.ly.enableGnomeKeyring = true;
 
+  # polkit
+  security.polkit.enable = true;
+
   # bluetooth (airpods, etc.)
   hardware.bluetooth.enable = true;
 
@@ -400,6 +403,7 @@
     u2f = {
       enable = true;
       settings = {
+        pinverification = 1;
         cue = true;
         cue_prompt = " Touch the Yubikey to continue...";
         interactive = false;
@@ -414,7 +418,8 @@
 
     services = {
       sudo.u2fAuth = true;
-      login.u2fAuth = false;
+      login.u2fAuth = true;
+      ly.u2fAuth = true;
     };
   };
 

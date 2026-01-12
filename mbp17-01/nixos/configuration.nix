@@ -125,7 +125,6 @@
     gcc
     ghostty
     git
-    glxinfo
     gnumake
     google-chrome
     grc
@@ -137,11 +136,12 @@
     kitty
     lazygit
     lm_sensors
-    lmstudio
+    # lmstudio
     logseq
     lsof
     ly
     # mako
+    mesa-demos
     nextcloud-client
     nix-search-tv
     nodejs_24
@@ -185,6 +185,7 @@
   };
 
   # Shells
+  programs.fzf.keybindings = true;
   programs.zsh.enable = true;
   programs.fish = {
     enable = true;

@@ -17,6 +17,9 @@
     extraGroups = [ "networkmanager" "wheel" "docker" ];
     shell = pkgs.fish;
   };
+  users.users.promtail = {
+    extraGroups = [ "docker" "systemd-journal"];
+  };
   programs.fish = {
     enable = true;
     shellInit = ''
@@ -80,6 +83,9 @@
     };
   }; 
   services.qemuGuest.enable = true;
+  services.promtail.enable = true;
+  services.promtail.configFile = "/etc/promtail/promtail-prod.yml";
+  services.promtail.extraFlags = [ "--client.external-labels=host=freshrss" ];
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   system.stateVersion = "25.05";
 }

@@ -34,9 +34,11 @@
   environment.systemPackages = with pkgs; [
     btop
     dig
+    fzf
     git
     grc
     htop
+    jq
     lazygit
     lsof
     nvd
@@ -45,10 +47,10 @@
     pciutils
     ripgrep
     tmux
-    fzf
     unzip
     vim
     wget
+    yazy
     zoxide
   ];
   virtualisation.docker.enable = true;

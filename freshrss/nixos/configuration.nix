@@ -50,7 +50,7 @@
     unzip
     vim
     wget
-    yazy
+    yazi
     zoxide
   ];
   virtualisation.docker.enable = true;
